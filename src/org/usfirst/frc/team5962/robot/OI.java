@@ -16,6 +16,6 @@ public class OI {
 	public OI() {
 		joystickLeft = new Joystick(1);
 		joystickRight = new Joystick(2);
-		joystickTankMode = new JoystickButton(joystickLeft,1);
+		joystickTankMode = new JoystickButton(joystickLeft, 1);
 	}
 }

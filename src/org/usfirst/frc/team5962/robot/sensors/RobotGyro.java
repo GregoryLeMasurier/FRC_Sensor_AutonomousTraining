@@ -54,8 +54,8 @@ public class RobotGyro {
 	 * output as it sweeps past from 360 to 0 on the second time around.
 	 * </pre>
 	 * 
-	 * @return the current heading of the robot in degrees. This heading is
-	 *         based on integration of the returned rate from the gyro.
+	 * @return the current heading of the robot in degrees. This heading is based on
+	 *         integration of the returned rate from the gyro.
 	 */
 
 	public double getGyroAngle() {

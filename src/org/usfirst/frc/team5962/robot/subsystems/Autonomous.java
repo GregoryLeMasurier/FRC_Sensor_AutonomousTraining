@@ -1,15 +1,18 @@
 package org.usfirst.frc.team5962.robot.subsystems;
 
 import org.usfirst.frc.team5962.robot.Robot;
-import org.usfirst.frc.team5962.robot.RobotMap;
 import org.usfirst.frc.team5962.robot.commands.Item;
 import org.usfirst.frc.team5962.robot.commands.RunAutonomous;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Autonomous extends Subsystem {
-	
+
 	private RunAutonomous runAuto = (RunAutonomous) Robot.autonomousCommand;
+
+	public enum sensorType {
+		encoder, ultrasonic, gyro, time
+	};
 
 	@Override
 	protected void initDefaultCommand() {
@@ -17,37 +20,23 @@ public class Autonomous extends Subsystem {
 
 	}
 
-	public void forward(double speed, int time) {
-		Item item = new Item(speed, time, 0);
+	public void forward(double speed, sensorType sensorName, int sensorValue) {
+		Item item = new Item(Math.abs(speed), 0, sensorName, sensorValue);
 		runAuto.addCommand(item);
 	}
 
-	public void turnLeft(double speed, int time) {
-		Item item = new Item(Math.abs(speed), time, 1);
+	public void turn(double speed, int sensorValue) {
+		Item item = new Item(Math.abs(speed), 1, sensorType.gyro, sensorValue);
 		runAuto.addCommand(item);
 	}
 
-	public void turnRight(double speed, int time) {
-		Item item = new Item(Math.abs(speed), time, -1);
-		runAuto.addCommand(item);
-	}
-
-	public void backwards(double speed, int time) {
-		Item item = new Item(-speed, time, 0);
+	public void backwards(double speed, sensorType sensorName, int sensorValue) {
+		Item item = new Item(-Math.abs(speed), 0, sensorName, sensorValue);
 		runAuto.addCommand(item);
 	}
 
 	public void stop(int time) {
-		Item item = new Item(0, time, 0);
+		Item item = new Item(0, 0, sensorType.time, time);
 		runAuto.addCommand(item);
-	}
-
-	public void driveBase(double power, int time, double turningValue, long startSystemTime) {
-		long currentTime = System.currentTimeMillis();
-		if (currentTime < (startSystemTime + (time / 1000))) {
-			RobotMap.myRobot.drive(-power, turningValue);
-		} else {
-			RobotMap.myRobot.drive(0, 0);
-		}
 	}
 }

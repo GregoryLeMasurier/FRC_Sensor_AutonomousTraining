@@ -2,24 +2,23 @@ package org.usfirst.frc.team5962.robot.commands;
 
 import org.usfirst.frc.team5962.robot.Robot;
 import org.usfirst.frc.team5962.robot.RobotMap;
+import org.usfirst.frc.team5962.robot.subsystems.Autonomous;
 
 public class Item {
-
-	public enum Direction {
-		forwards, backwards, turnLeft, turnRight, stop
-	};
-
+	// TODO: Reset encoders on encoder init.
 	private double speed;
-	private int time;
+	private double turningValue;
+	private Autonomous.sensorType sensorType;
+	private double sensorValue = 0;
 	private boolean complete = true;
 	private long startSystemTime = -1;
-	private double turningValue;
 	private double adjustedTurningValue;
 
-	public Item(double speed, int time, double turningValue) {
+	public Item(double speed, int turningValue, Autonomous.sensorType sensorType, int sensorValue) {
 		complete = false;
 		this.speed = speed;
-		this.time = time;
+		this.sensorType = sensorType;
+		this.sensorValue = sensorValue;
 		this.turningValue = turningValue;
 		this.adjustedTurningValue = turningValue;
 	}
@@ -28,10 +27,20 @@ public class Item {
 
 		return complete;
 	}
-	
+
 	private double getGyroAngle() {
 		double angle = Robot.gyro.getGyroAngle();
 		return angle;
+	}
+
+	private double getRange() {
+		double range = Robot.ultrasonic.getRange();
+		return range;
+	}
+
+	private double getDistance() {
+		double distance = Robot.encoder.getDistance();
+		return distance;
 	}
 
 	public void execute() {
@@ -39,22 +48,74 @@ public class Item {
 			RobotMap.myRobot.drive(0, 0);
 			return;
 		}
+		switch (sensorType) {
+		case time:
+			time();
+			break;
+		case encoder:
+			encoder();
+			break;
+		case ultrasonic:
+			ultrasonic();
+			break;
+		case gyro:
+			gyro();
+			break;
+		default:
+			break;
+		}
+	}
+
+	private void encoder() {
+		if (getDistance() < sensorValue) {
+			if (speed > 0 && turningValue == 0) {
+				double angle = getGyroAngle();
+				adjustedTurningValue = 0.03 * angle;
+			}
+			if (speed < 0 && turningValue == 0) {
+				double angle = getGyroAngle();
+				adjustedTurningValue = 0.03 * -angle;
+			}
+			RobotMap.myRobot.drive(-speed, adjustedTurningValue);
+		} else {
+			RobotMap.myRobot.drive(0, 0);
+			complete = true;
+		}
+	}
+
+	private void ultrasonic() {
+		if (getRange() < sensorValue) {
+			if (speed > 0 && turningValue == 0) {
+				double angle = getGyroAngle();
+				adjustedTurningValue = 0.03 * angle;
+			}
+			if (speed < 0 && turningValue == 0) {
+				double angle = getGyroAngle();
+				adjustedTurningValue = 0.03 * -angle;
+			}
+			RobotMap.myRobot.drive(-speed, adjustedTurningValue);
+		} else {
+			RobotMap.myRobot.drive(0, 0);
+			complete = true;
+		}
+	}
+
+	private void gyro() {
+		if (getGyroAngle() < sensorValue) {
+			RobotMap.myRobot.drive(-speed, turningValue);
+		} else {
+			RobotMap.myRobot.drive(0, 0);
+			complete = true;
+		}
+	}
+
+	private void time() {
 		if (startSystemTime == -1) {
 			RobotMap.myRobot.drive(0, 0);
 			startSystemTime = System.currentTimeMillis();
 		}
 		long currentTime = System.currentTimeMillis();
-		if (currentTime < (startSystemTime + (time * 1000))) {
-			//means forwards
-			if(speed > 0 && turningValue == 0){
-				double angle = getGyroAngle();
-				adjustedTurningValue = 0.03 * angle;
-			}
-			//means backwards
-			if(speed < 0 && turningValue == 0){
-				double angle = getGyroAngle();
-				adjustedTurningValue = 0.03 * -angle;
-			}
+		if (currentTime < (startSystemTime + (sensorValue * 1000))) {
 			RobotMap.myRobot.drive(-speed, adjustedTurningValue);
 		} else {
 			RobotMap.myRobot.drive(0, 0);
