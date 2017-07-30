@@ -5,7 +5,6 @@ import org.usfirst.frc.team5962.robot.RobotMap;
 import org.usfirst.frc.team5962.robot.subsystems.Autonomous;
 
 public class Item {
-	// TODO: Reset encoders on encoder init.
 	private double speed;
 	private double turningValue;
 	private Autonomous.sensorType sensorType;
@@ -13,14 +12,25 @@ public class Item {
 	private boolean complete = true;
 	private long startSystemTime = -1;
 	private double adjustedTurningValue;
+	private boolean isLeft = true;
 
 	public Item(double speed, int turningValue, Autonomous.sensorType sensorType, int sensorValue) {
+		init(speed,turningValue,sensorType,sensorValue);
+	}
+	
+	public Item(double speed, int turningValue, Autonomous.sensorType sensorType, int sensorValue, boolean isLeft) {
+		init(speed,turningValue,sensorType,sensorValue);
+		this.isLeft = isLeft;
+	}
+	
+	private void init(double speed, int turningValue, Autonomous.sensorType sensorType, int sensorValue) {
 		complete = false;
 		this.speed = speed;
 		this.sensorType = sensorType;
 		this.sensorValue = sensorValue;
 		this.turningValue = turningValue;
 		this.adjustedTurningValue = turningValue;
+		Robot.encoder.reset(); //reset encoders on every new command
 	}
 
 	public boolean isComplete() {
@@ -53,21 +63,26 @@ public class Item {
 			time();
 			break;
 		case encoder:
-			encoder();
+			drive(getDistance());			
 			break;
 		case ultrasonic:
-			ultrasonic();
+			drive(getRange());
 			break;
 		case gyro:
-			gyro();
+			if(isLeft) {
+			gyroLeft();
+			}
+			else {
+			gyroRight();
+			}
 			break;
 		default:
 			break;
 		}
 	}
-
-	private void encoder() {
-		if (getDistance() < sensorValue) {
+	
+	private void drive(double value) {
+		if (value < sensorValue) {
 			if (speed > 0 && turningValue == 0) {
 				double angle = getGyroAngle();
 				adjustedTurningValue = 0.03 * angle;
@@ -80,27 +95,18 @@ public class Item {
 		} else {
 			RobotMap.myRobot.drive(0, 0);
 			complete = true;
-		}
+		}		
 	}
 
-	private void ultrasonic() {
-		if (getRange() < sensorValue) {
-			if (speed > 0 && turningValue == 0) {
-				double angle = getGyroAngle();
-				adjustedTurningValue = 0.03 * angle;
-			}
-			if (speed < 0 && turningValue == 0) {
-				double angle = getGyroAngle();
-				adjustedTurningValue = 0.03 * -angle;
-			}
-			RobotMap.myRobot.drive(-speed, adjustedTurningValue);
+	private void gyroLeft() {
+		if (getGyroAngle() > sensorValue) {
+			RobotMap.myRobot.drive(-speed, turningValue);
 		} else {
 			RobotMap.myRobot.drive(0, 0);
 			complete = true;
 		}
 	}
-
-	private void gyro() {
+	private void gyroRight() {
 		if (getGyroAngle() < sensorValue) {
 			RobotMap.myRobot.drive(-speed, turningValue);
 		} else {

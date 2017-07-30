@@ -13,25 +13,34 @@ public class Autonomous extends Subsystem {
 	public enum sensorType {
 		encoder, ultrasonic, gyro, time
 	};
-
 	@Override
 	protected void initDefaultCommand() {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void forward(double speed, sensorType sensorName, int sensorValue) {
-		Item item = new Item(Math.abs(speed), 0, sensorName, sensorValue);
+	public void forwardWithEncoders(double speed, int sensorValue) {
+		Item item = new Item(Math.abs(speed), 0, sensorType.encoder, sensorValue);
+		runAuto.addCommand(item);
+	}
+	
+	public void forwardWithUltrasonic(double speed, int sensorValue) {
+		Item item = new Item(Math.abs(speed), 0, sensorType.ultrasonic, sensorValue);
 		runAuto.addCommand(item);
 	}
 
-	public void turn(double speed, int sensorValue) {
-		Item item = new Item(Math.abs(speed), 1, sensorType.gyro, sensorValue);
+	public void turnLeft(double speed, int sensorValue) {
+		Item item = new Item(Math.abs(speed), 1, sensorType.gyro, sensorValue, true);
+		runAuto.addCommand(item);
+	}
+	
+	public void turnRight(double speed, int sensorValue) {
+		Item item = new Item(Math.abs(speed), 1, sensorType.gyro, sensorValue, false);
 		runAuto.addCommand(item);
 	}
 
-	public void backwards(double speed, sensorType sensorName, int sensorValue) {
-		Item item = new Item(-Math.abs(speed), 0, sensorName, sensorValue);
+	public void backwardsWithEncoders(double speed, int sensorValue) {
+		Item item = new Item(-Math.abs(speed), 0, sensorType.encoder, sensorValue);
 		runAuto.addCommand(item);
 	}
 

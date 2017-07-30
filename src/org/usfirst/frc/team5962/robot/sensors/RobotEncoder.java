@@ -9,7 +9,8 @@ public class RobotEncoder {
 	Encoder encoderRight;
 
 	int numberOfEncoders = 2;
-
+	boolean isInverted = false;
+	
 	public RobotEncoder() {
 		encoderLeft = new Encoder(0, 1, true, Encoder.EncodingType.k4X);
 		encoderRight = new Encoder(2, 3, false, Encoder.EncodingType.k4X);
@@ -26,12 +27,17 @@ public class RobotEncoder {
 		encoderRight.reset();
 	}
 
+	public void invert() {
+		isInverted = true;
+	}
+	
 	public double getDistance() {
 		SmartDashboard.putString("Left Encoder Distance", "" + encoderLeft.getDistance());
 		SmartDashboard.putString("Right Encoder Distance", "" + encoderRight.getDistance());
 
 		double distance = ((encoderLeft.getDistance() + encoderRight.getDistance()) / numberOfEncoders);
-
+		if(isInverted)
+			distance = -distance;
 		SmartDashboard.putString("Encoder Distance", "" + distance);
 		return distance;
 	}

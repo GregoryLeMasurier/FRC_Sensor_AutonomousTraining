@@ -41,6 +41,8 @@ public class Robot extends IterativeRobot {
 		gyro.resetGyro();
 		oi = new OI();
 		drive = new Drive();
+		encoder.setNumberOfEncoders(1);
+		encoder.invert();
 	}
 
 	/**
@@ -71,7 +73,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		autonomousCommand = new RunAutonomous();
-
+		encoder.reset();
 		if (autonomousCommand != null) {
 			autonomousCommand.start();
 		}
