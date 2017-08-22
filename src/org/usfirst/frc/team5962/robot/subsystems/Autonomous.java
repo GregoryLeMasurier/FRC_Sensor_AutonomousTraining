@@ -35,7 +35,7 @@ public class Autonomous extends Subsystem {
 	}
 	
 	public void turnRight(double speed, int sensorValue) {
-		Item item = new Item(Math.abs(speed), 1, sensorType.gyro, sensorValue, false);
+		Item item = new Item(Math.abs(speed), -1, sensorType.gyro, sensorValue, false);
 		runAuto.addCommand(item);
 	}
 

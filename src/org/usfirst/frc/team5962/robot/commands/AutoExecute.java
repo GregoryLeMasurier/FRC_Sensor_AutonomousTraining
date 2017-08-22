@@ -31,9 +31,9 @@ public class AutoExecute {
 		//TODO: FIX TURNING NOT WORKING
 		driveRobot.turnLeft(1,90);
 		driveRobot.stop(1);
-		driveRobot.turnRight(1,0);
+		driveRobot.turnRight(1,90);
 		driveRobot.stop(1);
-		driveRobot.backwardsWithEncoders(1, -100);
+		driveRobot.backwardsWithEncoders(-1, 100);
 		driveRobot.stop(1);
 		driveRobot.forwardWithUltrasonic(1, 5);
 		driveRobot.stop(100);

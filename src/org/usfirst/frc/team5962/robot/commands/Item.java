@@ -4,6 +4,8 @@ import org.usfirst.frc.team5962.robot.Robot;
 import org.usfirst.frc.team5962.robot.RobotMap;
 import org.usfirst.frc.team5962.robot.subsystems.Autonomous;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Item {
 	private double speed;
 	private double turningValue;
@@ -13,6 +15,8 @@ public class Item {
 	private long startSystemTime = -1;
 	private double adjustedTurningValue;
 	private boolean isLeft = true;
+	private boolean isGyroInit = false;
+	private double startGyroAngle;
 
 	public Item(double speed, int turningValue, Autonomous.sensorType sensorType, int sensorValue) {
 		init(speed,turningValue,sensorType,sensorValue);
@@ -31,6 +35,7 @@ public class Item {
 		this.turningValue = turningValue;
 		this.adjustedTurningValue = turningValue;
 		Robot.encoder.reset(); //reset encoders on every new command
+		isGyroInit = false; //Force false every time to be safe.
 	}
 
 	public boolean isComplete() {
@@ -98,20 +103,41 @@ public class Item {
 		}		
 	}
 
+	//TODO: fix condition for turning
 	private void gyroLeft() {
-		if (getGyroAngle() > sensorValue) {
+		if(!isGyroInit) {
+			startGyroAngle = getGyroAngle();
+			isGyroInit = true;
+		}
+		SmartDashboard.putString("Start Gyro Angle ", "" + startGyroAngle);
+		SmartDashboard.putString("Sensor Value ", "" + sensorValue);
+		SmartDashboard.putString("Current Gyro Angle ", "" + getGyroAngle());
+		if (getGyroAngle() > -(startGyroAngle + sensorValue)) {
+			SmartDashboard.putString("Not complete left", "");
 			RobotMap.myRobot.drive(-speed, turningValue);
 		} else {
+			SmartDashboard.putString("Complete left", "" + getGyroAngle());
 			RobotMap.myRobot.drive(0, 0);
 			complete = true;
+			isGyroInit = false;
 		}
 	}
 	private void gyroRight() {
-		if (getGyroAngle() < sensorValue) {
+		if(!isGyroInit) {
+			startGyroAngle = getGyroAngle();
+			isGyroInit = true;
+		}
+		SmartDashboard.putString("Start Gyro Angle ", "" + startGyroAngle);
+		SmartDashboard.putString("Sensor Value ", "" + sensorValue);
+		SmartDashboard.putString("Current Gyro Angle ", "" + getGyroAngle());
+		if (getGyroAngle() < -(startGyroAngle - sensorValue)) {
+			SmartDashboard.putString("Not complete right", "");
 			RobotMap.myRobot.drive(-speed, turningValue);
 		} else {
+			SmartDashboard.putString("Complete right", "" + getGyroAngle());
 			RobotMap.myRobot.drive(0, 0);
 			complete = true;
+			isGyroInit = false;
 		}
 	}
 
