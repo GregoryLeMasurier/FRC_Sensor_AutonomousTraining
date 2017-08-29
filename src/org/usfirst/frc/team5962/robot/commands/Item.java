@@ -4,7 +4,6 @@ import org.usfirst.frc.team5962.robot.Robot;
 import org.usfirst.frc.team5962.robot.RobotMap;
 import org.usfirst.frc.team5962.robot.subsystems.Autonomous;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Item {
 	private double speed;
@@ -15,9 +14,7 @@ public class Item {
 	private long startSystemTime = -1;
 	private double adjustedTurningValue;
 	private boolean isLeft = true;
-	private boolean isGyroInit = false;
-	private double startGyroAngle;
-
+	
 	public Item(double speed, int turningValue, Autonomous.sensorType sensorType, int sensorValue) {
 		init(speed,turningValue,sensorType,sensorValue);
 	}
@@ -34,8 +31,8 @@ public class Item {
 		this.sensorValue = sensorValue;
 		this.turningValue = turningValue;
 		this.adjustedTurningValue = turningValue;
-		Robot.encoder.reset(); //reset encoders on every new command
-		isGyroInit = false; //Force false every time to be safe.
+		Robot.encoder.reset(); 
+		Robot.gyro.resetGyro();
 	}
 
 	public boolean isComplete() {
@@ -70,10 +67,10 @@ public class Item {
 			time();
 			break;
 		case encoder:
-			drive(getDistance());			
+			driveEncoders(getDistance());			
 			break;
 		case ultrasonic:
-			drive(getRange());
+			driveUltrasonic(getRange());
 			break;
 		case gyro:
 			if(isLeft) {
@@ -88,8 +85,7 @@ public class Item {
 		}
 	}
 	
-	private void drive(double value) {
-		SmartDashboard.putString("Backwards debug: ", "drive sensorValue: " + sensorValue + "drive value: " + value);
+	private void driveEncoders(double value) {
 		if (value < sensorValue) {
 			if (speed > 0 && turningValue == 0) {
 				double angle = getGyroAngle();
@@ -103,36 +99,48 @@ public class Item {
 		} else {
 			RobotMap.myRobot.drive(0, 0);
 			Robot.encoder.reset();
+			Robot.gyro.resetGyro();
+			complete = true;
+		}		
+	}
+	
+	private void driveUltrasonic(double value) {
+		if (value > sensorValue) {
+			if (speed > 0 && turningValue == 0) {
+				double angle = getGyroAngle();
+				adjustedTurningValue = 0.03 * angle;
+			}
+			if (speed < 0 && turningValue == 0) {
+				double angle = getGyroAngle();
+				adjustedTurningValue = 0.03 * -angle;
+			}
+			RobotMap.myRobot.drive(-speed, adjustedTurningValue);
+		} else {
+			RobotMap.myRobot.drive(0, 0);
+			Robot.encoder.reset();
+			Robot.gyro.resetGyro();
 			complete = true;
 		}		
 	}
 
 	private void gyroLeft() {
-		if(!isGyroInit) {
-			startGyroAngle = getGyroAngle();
-			isGyroInit = true;
-		}
-		if (getGyroAngle() > -(startGyroAngle + sensorValue)) {
+		if (-getGyroAngle() < sensorValue) {
 			RobotMap.myRobot.drive(-speed, turningValue);
 		} else {
 			RobotMap.myRobot.drive(0, 0);
 			Robot.encoder.reset();
+			Robot.gyro.resetGyro();
 			complete = true;
-			isGyroInit = false;
 		}
 	}
 	private void gyroRight() {
-		if(!isGyroInit) {
-			startGyroAngle = getGyroAngle();
-			isGyroInit = true;
-		}
-		if (getGyroAngle() < -(startGyroAngle + sensorValue)) {
+		if (getGyroAngle() < sensorValue) {
 			RobotMap.myRobot.drive(-speed, turningValue);
 		} else {
 			RobotMap.myRobot.drive(0, 0);
 			Robot.encoder.reset();
+			Robot.gyro.resetGyro();
 			complete = true;
-			isGyroInit = false;
 		}
 	}
 
@@ -147,6 +155,7 @@ public class Item {
 		} else {
 			RobotMap.myRobot.drive(0, 0);
 			Robot.encoder.reset();
+			Robot.gyro.resetGyro();
 			complete = true;
 		}
 	}

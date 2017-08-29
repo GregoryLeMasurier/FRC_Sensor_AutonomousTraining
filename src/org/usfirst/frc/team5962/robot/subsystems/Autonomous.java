@@ -45,7 +45,7 @@ public class Autonomous extends Subsystem {
 	}
 
 	public void stop(int time) {
-		Item item = new Item(0, 0, sensorType.time, time);
+		Item item = new Item(0, 0, sensorType.time, Math.abs(time));
 		runAuto.addCommand(item);
 	}
 }

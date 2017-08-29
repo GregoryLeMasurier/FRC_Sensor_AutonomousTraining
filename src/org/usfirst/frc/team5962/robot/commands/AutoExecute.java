@@ -26,17 +26,5 @@ public class AutoExecute {
 		 * 
 		 * Enter your code below:
 		 */
-		driveRobot.turnLeft(0.5,90);
-		driveRobot.stop(1);
-		driveRobot.forwardWithEncoders(1, 100);
-		driveRobot.stop(1);
-		//TODO: FIX TURNING NOT WORKING
-		
-		driveRobot.turnRight(0.5,90);
-		driveRobot.stop(1);
-		driveRobot.backwardsWithEncoders(-1, 100);
-		driveRobot.stop(1);
-		driveRobot.forwardWithUltrasonic(1, 5);
-		driveRobot.stop(100);
 	}
 }

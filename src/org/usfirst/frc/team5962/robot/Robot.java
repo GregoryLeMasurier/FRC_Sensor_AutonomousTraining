@@ -74,6 +74,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		autonomousCommand = new RunAutonomous();
 		encoder.reset();
+		gyro.resetGyro();
 		if (autonomousCommand != null) {
 			autonomousCommand.start();
 		}
