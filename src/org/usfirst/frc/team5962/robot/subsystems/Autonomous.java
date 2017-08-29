@@ -20,27 +20,27 @@ public class Autonomous extends Subsystem {
 	}
 
 	public void forwardWithEncoders(double speed, int sensorValue) {
-		Item item = new Item(Math.abs(speed), 0, sensorType.encoder, sensorValue);
+		Item item = new Item(Math.abs(speed), 0, sensorType.encoder, Math.abs(sensorValue));
 		runAuto.addCommand(item);
 	}
 	
 	public void forwardWithUltrasonic(double speed, int sensorValue) {
-		Item item = new Item(Math.abs(speed), 0, sensorType.ultrasonic, sensorValue);
+		Item item = new Item(Math.abs(speed), 0, sensorType.ultrasonic, Math.abs(sensorValue));
 		runAuto.addCommand(item);
 	}
 
 	public void turnLeft(double speed, int sensorValue) {
-		Item item = new Item(Math.abs(speed), 1, sensorType.gyro, sensorValue, true);
+		Item item = new Item(Math.abs(speed), 1, sensorType.gyro, Math.abs(sensorValue), true);
 		runAuto.addCommand(item);
 	}
 	
 	public void turnRight(double speed, int sensorValue) {
-		Item item = new Item(Math.abs(speed), -1, sensorType.gyro, sensorValue, false);
+		Item item = new Item(Math.abs(speed), -1, sensorType.gyro, Math.abs(sensorValue), false);
 		runAuto.addCommand(item);
 	}
 
 	public void backwardsWithEncoders(double speed, int sensorValue) {
-		Item item = new Item(-Math.abs(speed), 0, sensorType.encoder, sensorValue);
+		Item item = new Item(-Math.abs(speed), 0, sensorType.encoder, Math.abs(sensorValue));
 		runAuto.addCommand(item);
 	}
 

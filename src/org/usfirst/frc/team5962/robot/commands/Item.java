@@ -55,6 +55,8 @@ public class Item {
 
 	private double getDistance() {
 		double distance = Robot.encoder.getDistance();
+		if(this.speed < 0 && this.turningValue == 0)
+			distance = -distance;
 		return distance;
 	}
 
@@ -87,6 +89,7 @@ public class Item {
 	}
 	
 	private void drive(double value) {
+		SmartDashboard.putString("Backwards debug: ", "drive sensorValue: " + sensorValue + "drive value: " + value);
 		if (value < sensorValue) {
 			if (speed > 0 && turningValue == 0) {
 				double angle = getGyroAngle();
@@ -99,25 +102,21 @@ public class Item {
 			RobotMap.myRobot.drive(-speed, adjustedTurningValue);
 		} else {
 			RobotMap.myRobot.drive(0, 0);
+			Robot.encoder.reset();
 			complete = true;
 		}		
 	}
 
-	//TODO: fix condition for turning
 	private void gyroLeft() {
 		if(!isGyroInit) {
 			startGyroAngle = getGyroAngle();
 			isGyroInit = true;
 		}
-		SmartDashboard.putString("Start Gyro Angle ", "" + startGyroAngle);
-		SmartDashboard.putString("Sensor Value ", "" + sensorValue);
-		SmartDashboard.putString("Current Gyro Angle ", "" + getGyroAngle());
 		if (getGyroAngle() > -(startGyroAngle + sensorValue)) {
-			SmartDashboard.putString("Not complete left", "");
 			RobotMap.myRobot.drive(-speed, turningValue);
 		} else {
-			SmartDashboard.putString("Complete left", "" + getGyroAngle());
 			RobotMap.myRobot.drive(0, 0);
+			Robot.encoder.reset();
 			complete = true;
 			isGyroInit = false;
 		}
@@ -127,15 +126,11 @@ public class Item {
 			startGyroAngle = getGyroAngle();
 			isGyroInit = true;
 		}
-		SmartDashboard.putString("Start Gyro Angle ", "" + startGyroAngle);
-		SmartDashboard.putString("Sensor Value ", "" + sensorValue);
-		SmartDashboard.putString("Current Gyro Angle ", "" + getGyroAngle());
-		if (getGyroAngle() < -(startGyroAngle - sensorValue)) {
-			SmartDashboard.putString("Not complete right", "");
+		if (getGyroAngle() < -(startGyroAngle + sensorValue)) {
 			RobotMap.myRobot.drive(-speed, turningValue);
 		} else {
-			SmartDashboard.putString("Complete right", "" + getGyroAngle());
 			RobotMap.myRobot.drive(0, 0);
+			Robot.encoder.reset();
 			complete = true;
 			isGyroInit = false;
 		}
@@ -151,6 +146,7 @@ public class Item {
 			RobotMap.myRobot.drive(-speed, adjustedTurningValue);
 		} else {
 			RobotMap.myRobot.drive(0, 0);
+			Robot.encoder.reset();
 			complete = true;
 		}
 	}
