@@ -8,23 +8,23 @@ Examples of function calls:
 
 //Robot moves backwards at the given speed(double from -1 to 1) until it moves backwards "sensorValue" inches (int)
 
-backwardsWithEncoders(speed, sensorValue)
+driveRobot.backwardsWithEncoders(speed, sensorValue)
   
 //Robot moves forwards at the given speed(double from -1 to 1) until it moves forward "sensorValue" inches (int)
 
-forwardWithEncoders(speed, sensorValue);
+driveRobot.forwardWithEncoders(speed, sensorValue);
 
 //Robot moves forwards at the given speed(double from -1 to 1) until the ultrasonic gets a value less than sensorValue (int)
 
-forwardWithUltrasonic(speed, sensorValue)
+driveRobot.forwardWithUltrasonic(speed, sensorValue)
   
 //Robot turns to the left at the given speed(double from -1 to 1) until it has turned "sensorValue" degrees (int)
 
-turnLeft(speed, sensorValue)
+driveRobot.turnLeft(speed, sensorValue)
   
 //Robot turns to the right at the given speed(double from -1 to 1) until it has turned "sensorValue" degrees (int)
 
-turnRight(speed, sensorValue)
+driveRobot.turnRight(speed, sensorValue)
   
 //Robot stops for time (int) seconds
 
