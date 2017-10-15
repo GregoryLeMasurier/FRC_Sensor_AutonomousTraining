@@ -7,16 +7,19 @@ public class AutoExecute {
 
 	public void init() {
 		/*
-		 * If you want to move the robot forwards type: 
-		 * driveRobot.forward(speed, sensorName, sensorValue); 
-		 * Speed is any number from -1 to 1 sensorName is the name of the sensor 
-		 * (encoder or ultrasonic) that you want to use. sensorValue is the maximum 
+		 * If you want to move the robot forwards for a set distance type: 
+		 * driveRobot.forwardWithEncoders(speed, sensorValue); 
+		 * Speed is any number from -1 to 1 and sensorValue is the maximum 
+		 * value you want the sensor to get to while moving forward.
+		 * 
+		 * If you want to move the robot forwards until it is a specific distance from a wall type: 
+		 * driveRobot.forwardWithUltrasonic(speed, sensorValue); 
+		 * Speed is any number from -1 to 1 and sensorValue is the maximum 
 		 * value you want the sensor to get to while moving forward.
 		 * 
 		 * If you want to move the robot backwards type: 
-		 * driveRobot.backwards(speed, sensorName, sensorValue); 
-		 * Speed is any number from -1 to 1 sensorName is the name of the sensor 
-		 * (encoder or ultrasonic) that you want to use. sensorValue is the maximum 
+		 * driveRobot.backwards(speed, sensorValue); 
+		 * Speed is any number from -1 to 1 and sensorValue is the maximum 
 		 * value you want the sensor to get to while moving backwards.
 		 * 
 		 * If you want to turn the robot to the right type: 
@@ -30,5 +33,6 @@ public class AutoExecute {
 		 * 
 		 * Enter your code below:
 		 */
+		
 	}
 }
