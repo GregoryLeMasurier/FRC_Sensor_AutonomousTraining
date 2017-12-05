@@ -105,7 +105,7 @@ public class Item {
 	}
 	
 	private void driveUltrasonic(double value) {
-		speed /= 2;
+		RobotMap.myRobot.setMaxOutput(0.25);
 		if (value > sensorValue) {
 			if (speed > 0 && turningValue == 0) {
 				double angle = getGyroAngle();
@@ -117,6 +117,7 @@ public class Item {
 			}
 			RobotMap.myRobot.drive(-speed, adjustedTurningValue);
 		} else {
+			RobotMap.myRobot.setMaxOutput(1);
 			RobotMap.myRobot.drive(0, 0);
 			Robot.encoder.reset();
 			Robot.gyro.resetGyro();
