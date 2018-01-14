@@ -4,17 +4,19 @@ import org.usfirst.frc.team5962.robot.RobotMap;
 import org.usfirst.frc.team5962.robot.subsystems.Autonomous;
 
 public class AutoExecute {
-	public static Autonomous driveRobot = new Autonomous();
 
+	public static Autonomous driveRobot;
+	
 	public void init() {
 		RobotMap.set_left_drive(0, 1);
-		RobotMap.set_right_drive(2, 3);
+		RobotMap.set_right_drive(6, 7);
 		
 		RobotMap.invert_left_drive(true);
-		RobotMap.invert_right_drive(true);
+		RobotMap.invert_right_drive(true);	
 	}
 	
 	public void execute() {
+		driveRobot = new Autonomous();
 		/*
 		 * If you want to move the robot forwards for a set distance type: 
 		 * driveRobot.forwardWithEncoders(speed, sensorValue); 
@@ -42,9 +44,6 @@ public class AutoExecute {
 		 * 
 		 * Enter your code below:
 		 */
-		driveRobot.stop(1);
-		driveRobot.turnLeft(0.25, 90);
-		//driveRobot.forwardWithEncoders(0.25, 100);
 		
 	}
 }
