@@ -8,16 +8,14 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class RunAutonomous extends Command {
 
-	private AutoExecute execute;
 	private static ArrayList<Item> commands = new ArrayList<Item>();
 	private int index;
 
 	protected void initialize() {
 		index = 0;
-		execute = new AutoExecute();
 		Robot.gyro.resetGyro();
 		RobotMap.myRobot.setMaxOutput(0.5);
-		execute.init();
+		Robot.auto_execute.execute();
 	}
 
 	protected void execute() {
