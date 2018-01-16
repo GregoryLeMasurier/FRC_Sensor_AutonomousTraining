@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+
+import org.usfirst.frc.team5962.robot.commands.AutoExecute;
 import org.usfirst.frc.team5962.robot.commands.RunAutonomous;
 import org.usfirst.frc.team5962.robot.commands.RunJoystickTank;
 import org.usfirst.frc.team5962.robot.sensors.RobotEncoder;
@@ -25,7 +27,8 @@ public class Robot extends IterativeRobot {
 	public static RobotUltrasonicAnalog ultrasonic;
 	public static RobotGyro gyro = new RobotGyro();
 	public static RobotEncoder encoder = new RobotEncoder();
-
+    public static AutoExecute auto_execute = new AutoExecute();
+	
 	public static Command autonomousCommand;
 
 	/**
